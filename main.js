@@ -62,6 +62,20 @@ class Toaster {
         }));
         forEachElementDo(this.findAnchor().getElementsByClassName("jmt-frame") , (x)=> {x.appendChild(closeGroup)})
     }
+
+    addYesNoButtons(options) {
+        let btnGroup = createElement("div" , "" , ["jmt-yesno"]);
+        for (const [key, value] of Object.entries(options)) {
+            btnGroup.appendChild(this.createButton({
+                caption : key,
+                action : (x) => value.action(),
+                hideOnClick : value.hideOnClick
+            }));
+        this.findAnchor().appendChild(btnGroup)
+        }
+
+
+    }
     enableVisibility() {
         this.findAnchor().classList.add("visible");
     }
