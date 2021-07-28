@@ -3,43 +3,64 @@ class Toaster {
     // # function pour créer toast
     // # function pour définir les options
     
-    constructor(options) {
-        this.anchor = document.getElementById(options.anchorid);
+    constructor(name = "action" , options) {
+        this.anchor = document.getElementById(options.id);
+        this._options = {
+            default : {
+
+            },
+            options,
+        }
 
         this.createMainFrame()
     }
 
     findAnchor(){
+        if(this.anchor == undefined) throw "No tag to work with. Be sure that you provide an id" ;
         return this.anchor;
     }
 
     createMainFrame(classList = []) {
+        console.log(this);
+        this.findAnchor().classList.add("jmt-toaster");
         let mainFrame = document.createElement("div");
+        mainFrame.classList.add("jmt-frame");
         classList.map( (c) =>{ mainFrame.classList.add(c)} ) ;
-        mainFrame.id = "jmt-frame";
-        let message = createElement("div" , "" , "jmt-message");
+        
+        let message = createElement("div" , "" , ["jmt-message"]);
         mainFrame.appendChild(message);
         this.findAnchor().appendChild(mainFrame);
     }
 
     addMessage(message) {
-        document.getElementById("jmt-frame").innerHTML = message;
+        console.log(document.getElementsByClassName("jmt-message"));
+        let collection = this.findAnchor().getElementsByClassName("jmt-message");
+        let action = function(elm) {elm.innerHTML = message}
+        forEachElementDo(collection , (x) => {x.innerHTML = message});
     }
 
+    /**
+     * Create a new button with its own logic
+     *
+     * @param {string} options.caption The text in the button.
+     * @param {Object} options.action The function defining what will happen on click.
+     * @param {boolean} options.hideOnClick Whether or not the Toaster will hide on click.
+     */
     createButton (options) {
-        let options = {
-            caption : "text",
-            action : (x)=> console.log("coucou"),
-            hideOnClick : true
-        }
+        let btn = createElement("button" , options.caption);
+        btn.addEventListener("click" , options.action);
+        if(options.hideOnClick) btn.addEventListener("click",(x)=> this.disableVisibility());
+        return btn;
     }
 
     addCloseButton() {
-        let closeGroup = createElement("div" , "" , "jmt-closebtn");
-        let closeBtn = createElement("button","Close");
-        closeBtn.addEventListener("click", (x) => this.disableVisibility())
-        closeGroup.appendChild(closeBtn);
-        document.getElementById("jmt-frame").appendChild(closeGroup);
+        let closeGroup = createElement("div" , "" , ["jmt-closebtn"]);     
+        closeGroup.appendChild(this.createButton({
+            caption : "Close",
+            action : (x) => console.log(),
+            hideOnClick : true
+        }));
+        forEachElementDo(this.findAnchor().getElementsByClassName("jmt-frame") , (x)=> {x.appendChild(closeGroup)})
     }
     enableVisibility() {
         this.findAnchor().classList.add("visible");
@@ -54,9 +75,15 @@ class Toaster {
     }
 }
 
-function createElement(type = "div",innerHtml = null , id = null ) {
+function createElement(type = "div",innerHtml = null , classList = [] ) {
     let elm = document.createElement(type);
     elm.innerHTML = innerHtml;
-    elm.id = id;
+    classList.map((x)=> elm.classList.add(x));
     return elm;
+}
+
+function forEachElementDo(collection , action) {
+    for (let i = 0; i < collection.length; i++) {
+        action(collection[i]);         
+    }
 }
