@@ -22,17 +22,17 @@ class Toaster {
         return this.anchor;
     }
     createMainFrame(classList = []) {
-        this.findAnchor().classList.add("jmt-toaster");
+        this.findAnchor().classList.add("jom-toaster");
         let mainFrame = document.createElement("div");
-        mainFrame.classList.add("jmt-frame");
+        mainFrame.classList.add("jom-frame");
         classList.map( (c) =>{ mainFrame.classList.add(c)} ) ;
         
-        let message = createElement("div" , "" , ["jmt-message"]);
+        let message = createElement("div" , "" , ["jom-message"]);
         mainFrame.appendChild(message);
         this.findAnchor().appendChild(mainFrame);
     }
     addMessage(message) {
-        let collection = this.findAnchor().getElementsByClassName("jmt-message");
+        let collection = this.findAnchor().getElementsByClassName("jom-message");
         let action = function(elm) {elm.innerHTML = message}
         forEachElementDo(collection , (x) => {x.innerHTML = message});
     }
@@ -50,16 +50,16 @@ class Toaster {
         return btn;
     }
     addCloseButton() {
-        let closeGroup = createElement("div" , "" , ["jmt-closebtn"]);     
+        let closeGroup = createElement("div" , "" , ["jom-closebtn"]);     
         closeGroup.appendChild(this.createButton({
             caption : "Close",
             action : (x) => console.log(),
             hideOnClick : true
         }));
-        forEachElementDo(this.findAnchor().getElementsByClassName("jmt-frame") , (x)=> {x.appendChild(closeGroup)})
+        forEachElementDo(this.findAnchor().getElementsByClassName("jom-frame") , (x)=> {x.appendChild(closeGroup)})
     }
     createCustomButtonGroup (options) {
-        let btnGroup = createElement("div" , "" , ["jmt-custombtn"]);
+        let btnGroup = createElement("div" , "" , ["jom-custombtn"]);
         for (const [key, value] of Object.entries(options)) {
             btnGroup.appendChild(this.createButton({
                 caption : key,
@@ -70,7 +70,7 @@ class Toaster {
          }
     }
     addYesNoButtons(options) {
-        let btnGroup = createElement("div" , "" , ["jmt-yesno"]);
+        let btnGroup = createElement("div" , "" , ["jom-yesno"]);
         for (const [key, value] of Object.entries(options)) {
             btnGroup.appendChild(this.createButton({
                 caption : key,
