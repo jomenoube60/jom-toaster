@@ -2,22 +2,26 @@ class Toaster {
     // # Initialiser
     // # function pour créer toast
     // # function pour définir les options    
-    constructor(name = "action" , options) {
+    constructor(options) {
         this.anchor = document.getElementById(options.id);
         this._options = {
             default : {
-
+                position :"top"
             },
-            options,
+            show_default : {
+                message : "Hello",
+                closeTimeOut : 1000,
+                binaryQuestion : false,
+                closeButton : false,
+                customButtons : null
+            },
         }
-        this.createMainFrame()
     }
     findAnchor(){
         if(this.anchor == undefined) throw "No tag to work with. Be sure that you provide an id" ;
         return this.anchor;
     }
     createMainFrame(classList = []) {
-        console.log(this);
         this.findAnchor().classList.add("jmt-toaster");
         let mainFrame = document.createElement("div");
         mainFrame.classList.add("jmt-frame");
@@ -28,7 +32,6 @@ class Toaster {
         this.findAnchor().appendChild(mainFrame);
     }
     addMessage(message) {
-        console.log(document.getElementsByClassName("jmt-message"));
         let collection = this.findAnchor().getElementsByClassName("jmt-message");
         let action = function(elm) {elm.innerHTML = message}
         forEachElementDo(collection , (x) => {x.innerHTML = message});
@@ -83,10 +86,24 @@ class Toaster {
     disableVisibility() {
         this.findAnchor().classList.remove("visible");
     }
-    show(options) {
-        this.addMessage(options.message)
-        this.addCloseButton()
-        this.enableVisibility()
+    cleanToaster() {
+        removeAllChildElement(this.findAnchor());
+    }
+    show(options = this._options.show_default) {
+        this.cleanToaster();
+        this.createMainFrame();
+        this.addMessage(options.message);
+        this.enableVisibility();
+        if (options.binaryQuestion) this.addYesNoButtons();
+        if (options.closeButton) this.addCloseButton();
+        if (options.closeTimeOut > 0) setTimeout((x) => this.disableVisibility() , options.closeTimeOut);
+        
+    }
+}
+
+function removeAllChildElement(elm) {
+    while (elm.lastChild) {
+        elm.removeChild(elm.lastChild);
     }
 }
 function createElement(type = "div",innerHtml = null , classList = [] ) {
