@@ -1,8 +1,7 @@
 class Toaster {
     // # Initialiser
     // # function pour créer toast
-    // # function pour définir les options
-    
+    // # function pour définir les options    
     constructor(name = "action" , options) {
         this.anchor = document.getElementById(options.id);
         this._options = {
@@ -11,15 +10,12 @@ class Toaster {
             },
             options,
         }
-
         this.createMainFrame()
     }
-
     findAnchor(){
         if(this.anchor == undefined) throw "No tag to work with. Be sure that you provide an id" ;
         return this.anchor;
     }
-
     createMainFrame(classList = []) {
         console.log(this);
         this.findAnchor().classList.add("jmt-toaster");
@@ -31,14 +27,12 @@ class Toaster {
         mainFrame.appendChild(message);
         this.findAnchor().appendChild(mainFrame);
     }
-
     addMessage(message) {
         console.log(document.getElementsByClassName("jmt-message"));
         let collection = this.findAnchor().getElementsByClassName("jmt-message");
         let action = function(elm) {elm.innerHTML = message}
         forEachElementDo(collection , (x) => {x.innerHTML = message});
     }
-
     /**
      * Create a new button with its own logic
      *
@@ -52,7 +46,6 @@ class Toaster {
         if(options.hideOnClick) btn.addEventListener("click",(x)=> this.disableVisibility());
         return btn;
     }
-
     addCloseButton() {
         let closeGroup = createElement("div" , "" , ["jmt-closebtn"]);     
         closeGroup.appendChild(this.createButton({
@@ -71,6 +64,7 @@ class Toaster {
                 hideOnClick : value.hideOnClick
             }));
         this.findAnchor().appendChild(btnGroup)        
+         }
     }
     addYesNoButtons(options) {
         let btnGroup = createElement("div" , "" , ["jmt-yesno"]);
@@ -82,8 +76,6 @@ class Toaster {
             }));
         this.findAnchor().appendChild(btnGroup)
         }
-
-
     }
     enableVisibility() {
         this.findAnchor().classList.add("visible");
@@ -97,14 +89,12 @@ class Toaster {
         this.enableVisibility()
     }
 }
-
 function createElement(type = "div",innerHtml = null , classList = [] ) {
     let elm = document.createElement(type);
     elm.innerHTML = innerHtml;
     classList.map((x)=> elm.classList.add(x));
     return elm;
 }
-
 function forEachElementDo(collection , action) {
     for (let i = 0; i < collection.length; i++) {
         action(collection[i]);         
